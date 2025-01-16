@@ -1,0 +1,49 @@
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+    volumes:
+      - /var/www:/var/www
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - core
+
+  caddy:
+    container_name: caddy
+    image: caddy:2.8.4-alpine
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /var/www:/var/www:ro
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    restart: unless-stopped
+    networks:
+      - core
+
+  sftpgo:
+    image: drakkan/sftpgo:v2.6.4-alpine
+    container_name: sftpgo
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+      - "8088:8080"
+    volumes:
+      - /var/www:/srv/sftpgo/data
+      - ./sftpgo/backups:/srv/sftpgo/backups
+      - ./sftpgo/home:/var/lib/sftpgo
+    environment:
+      - SFTPGO_FTPD__BINDINGS__0__PORT=21
+      - SFTPGO_FTPD__PASSIVE_PORT_RANGE__START=21000
+      - SFTPGO_FTPD__PASSIVE_PORT_RANGE__END=21010
+    restart: unless-stopped
+    networks:
+      - core
+
+networks:
+  core:
+    name: core
+    driver: bridge
