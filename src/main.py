@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from sqlmodel import SQLModel, Field, Session, create_engine, select
 from typing import Optional
 import os
@@ -42,6 +42,6 @@ def check_domain(domain: str):
 
         user = results[0].user
 
-        symlink(domain, user)
+        background_tasks.add_task(symlink,domain, user)
 
         return {"domain": domain}
