@@ -12,8 +12,11 @@ app = FastAPI()
 def on_startup():
     SQLModel.metadata.create_all(engine)
 
-# Only for testing we add later a endpoint for user creating
-user1 = Users(user="tim", domain="bot-tec.de")
+    # Only for testing we add later a endpoint for user creating
+    user1 = Users(user="tim", domain="bot-tec.de")
+    with Session(engine) as session:
+        session.add(user1)
+        session.commit()
 
 def symlink(domain: str, user: str):
     path = "/var/www/" + user + "/" + domain
@@ -32,8 +35,6 @@ def symlink(domain: str, user: str):
 @app.get("/check")
 def check_domain(domain: str, background_tasks: BackgroundTasks):
     with Session(engine) as session:
-        session.add(user1)
-        session.commit()
         statement = select(Users).where(Users.domain == domain)
         results = session.exec(statement).all()
 
