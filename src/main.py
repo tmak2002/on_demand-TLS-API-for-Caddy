@@ -3,16 +3,14 @@ from sqlmodel import SQLModel, Field, Session, create_engine, select
 from typing import Optional
 import os
 
+from models import Users
+from database import engine, get_session
+
 app = FastAPI()
 
-class Users(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    user: str
-    domain: str
-
-engine = create_engine("sqlite:///users.db")
-
-SQLModel.metadata.create_all(engine)
+@app.on_event("startup")
+def on_startup():
+    SQLModel.metadata.create_all(engine)
 
 # Only for testing we add later a endpoint for user creating
 user1 = Users(user="tim", domain="bot-tec.de")
