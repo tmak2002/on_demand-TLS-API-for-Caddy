@@ -30,7 +30,7 @@ def symlink(domain: str, user: str):
         os.symlink(path, symlink_path)
 
 @app.get("/check")
-def check_domain(domain: str):
+def check_domain(domain: str, background_tasks: BackgroundTasks):
     with Session(engine) as session:
         session.add(user1)
         session.commit()
