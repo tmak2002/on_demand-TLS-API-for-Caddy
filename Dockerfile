@@ -11,6 +11,8 @@ COPY requirements.txt /app
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN mkdir /data
+
 # Expose the port the app runs on
 EXPOSE 8000
 
