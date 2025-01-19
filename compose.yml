@@ -5,6 +5,7 @@ services:
       context: .
     volumes:
       - /var/www:/var/www
+      - ./data:/data
     environment:
       - PYTHONUNBUFFERED=1
     networks:
