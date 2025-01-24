@@ -1,7 +1,8 @@
 from sqlmodel import create_engine, Session
 
-DATABASE_URL = "sqlite:///data/users.db"
+DATABASE_URL = "postgresql://api:api@postgres:5432/api"
 engine = create_engine(DATABASE_URL, echo=True)
 
 def get_session():
     return Session(engine)
+
