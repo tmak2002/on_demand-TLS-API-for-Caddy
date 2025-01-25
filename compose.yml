@@ -1,11 +1,11 @@
 services:
-    postgres:
+  postgres:
     container_name: postgres
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: api
-      POSTGRES_PASSWORD: api
-      POSTGRES_DB: users
+      - POSTGRES_USER=api
+      - POSTGRES_PASSWORD=api
+      - POSTGRES_DB=users
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     networks:
